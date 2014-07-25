@@ -4,7 +4,7 @@
   "license": "GPL",
   "tags": [ "potrace", "vectorize bitmap", "haxe", "openfl" ],
   "description": "Potrace(TM) is a tool for tracing a bitmap, which means, transforming a bitmap into a smooth, scalable image.",
-  "version": "1.8.0",
+  "version": "0.0.1",
   "releasenote": "HAXE openfl port of Potrace",
   "contributors": [ "Peter Selinger", "Claus Wahlers", "Damion Murray" ],
   "dependencies": {
