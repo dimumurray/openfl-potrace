@@ -1,29 +1,29 @@
 /*
-	This program is free software; you can redistribute it and/or modify it 
-	under the terms of the GNU General Public License as published by the 
-	Free Software Foundation; either version 2, or (at your option) any later
-	version.
-	
-	This program is distributed in the hope that it will be useful, but 
-	WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
-	Public License for more details.
+    This program is free software; you can redistribute it and/or modify it
+    under the terms of the GNU General Public License as published by the
+    Free Software Foundation; either version 2, or (at your option) any later
+    version.
 
-	You should have received a copy of the GNU General Public License along
-	with this program; if not, write to the Free Software Foundation, Inc.,
-	59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
-	
-	Copyright (C) 2001-2010 Peter Selinger (Original author)
-	Copyright (C) 2009 Wolfgang Nagl (C# port of Potrace 1.8: "Vectorization")
-	Copyright (C) 2011 Claus Wahlers (AS3 port of Vectorization: "as3potrace")
-	
-	"Potrace" is a trademark of Peter Selinger. "Potrace Professional" and
-	"Icosasoft" are trademarks of Icosasoft Software Inc. Other trademarks
-	belong to their respective owners.
-	
-	http://potrace.sourceforge.net/
-	http://www.drawing3d.de/Downloads.aspx (Vectorization)
-	https://github.com/Poweropenfl.rBR/as3potrace (as3potrace)
+    This program is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+    Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+
+    Copyright (C) 2001-2010 Peter Selinger (Original author)
+    Copyright (C) 2009 Wolfgang Nagl (C# port of Potrace 1.8: "Vectorization")
+    Copyright (C) 2011 Claus Wahlers (AS3 port of Vectorization: "as3potrace")
+
+    "Potrace" is a trademark of Peter Selinger. "Potrace Professional" and
+    "Icosasoft" are trademarks of Icosasoft Software Inc. Other trademarks
+    belong to their respective owners.
+
+    http://potrace.sourceforge.net/
+    http://www.drawing3d.de/Downloads.aspx (Vectorization)
+    https://github.com/Poweropenfl.rBR/as3potrace (as3potrace)
 */
 
 package potrace;
@@ -168,10 +168,10 @@ class POTrace {
     
    /**
     * Decompose the given bitmap into paths. Returns a list of
-	* Path objects with the fields len, pt, area filled
-	*
-	* @param bitmapDataMatix
-	*/
+    * Path objects with the fields len, pt, area filled
+    *
+    * @param bitmapDataMatix
+    */
     private function bm_to_pathlist(bitmapDataMatrix : Vector<Vector<Int>>) : Array<Array<Path>> {
         var plists : Array<Array<Path>> = new Array<Array<Path>>();
         var pt : PointInt;
@@ -182,11 +182,11 @@ class POTrace {
     }
     
    /**
-	* Searches a point such that source[x, y] = true and source[x+1, y] = false.
-	* If this not exists, null will be returned, else the result is Point(x, y).
-	*
-	* @param bitmpaDataMatrix
-	*/
+    * Searches a point such that source[x, y] = true and source[x+1, y] = false.
+    * If this not exists, null will be returned, else the result is Point(x, y).
+    *
+    * @param bitmpaDataMatrix
+    */
     private function find_next(bitmapDataMatrix : Vector<Vector<Int>>) : PointInt {
         var x : Int;
         var y : Int;
@@ -241,17 +241,17 @@ class POTrace {
 
    /**
     * Compute a path in the binary matrix.
-	*
+    *
     * Start path at the point (x0,x1), which must be an upper left corner
-	* of the path. Also compute the area enclosed by the path. Return a
-	* new path_t object, or NULL on error (note that a legitimate path
-	* cannot have length 0).
-	*
-	* We omit turnpolicies and sign
-	*
-	* @param bitmapDataMatrix
-	* @param start
-	*/
+    * of the path. Also compute the area enclosed by the path. Return a
+    * new path_t object, or NULL on error (note that a legitimate path
+    * cannot have length 0).
+    *
+    * We omit turnpolicies and sign
+    *
+    * @param bitmapDataMatrix
+    * @param start
+    */
     private function find_path(bitmapDataMatrix : Vector<Vector<Int>>, start : PointInt) : Path {
         var l : Vector<PointInt> = new Vector<PointInt>();
         var p : PointInt = start.clone();
@@ -289,12 +289,12 @@ class POTrace {
     }
     
    /**
-	* Searches a point inside a path such that source[x, y] = true and source[x+1, y] = false.
-	* If this not exists, null will be returned, else the result is Point(x, y).
-	*
-	* @param bitmapDataMatrix
-	* @param path
-	*/
+    * Searches a point inside a path such that source[x, y] = true and source[x+1, y] = false.
+    * If this not exists, null will be returned, else the result is Point(x, y).
+    *
+    * @param bitmapDataMatrix
+    * @param path
+    */
     private function find_next_in_path(bitmapDataMatrix : Vector<Vector<Int>>, path : Path) : PointInt {
         if (path.monotonIntervals.length == 0) {
             return null;
@@ -606,8 +606,8 @@ class POTrace {
     /////////////////////////////////////////////////////////////////////////
     
    /**
-	* Fill in the sum* fields of a path (used for later rapid summing)
-	*/
+    * Fill in the sum* fields of a path (used for later rapid summing)
+    */
     private function calc_sums(path : Path) : Void
     {
         var n : Int = path.pt.length;
@@ -822,9 +822,9 @@ class POTrace {
     /////////////////////////////////////////////////////////////////////////
     
    /**
-	* Auxiliary function: calculate the penalty of an edge from i to j in
-	* the given path. This needs the "lon" and "sum*" data.
-	*/
+    * Auxiliary function: calculate the penalty of an edge from i to j in
+    * the given path. This needs the "lon" and "sum*" data.
+    */
     private function penalty3(path : Path, i : Int, j : Int) : Float
     {
         var n : Int = path.pt.length;
@@ -859,8 +859,8 @@ class POTrace {
     }
     
    /**
-	* Find the optimal polygon.
-	*/
+    * Find the optimal polygon.
+    */
     private function bestpolygon(path : Path) : Void
     {
         var i : Int;
@@ -956,10 +956,10 @@ class POTrace {
     /////////////////////////////////////////////////////////////////////////
     
    /**
-	* Adjust vertices of optimal polygon: calculate the intersection of
-	* the two "optimal" line segments, then move it into the unit square
-	* if it lies outside.
-	*/
+    * Adjust vertices of optimal polygon: calculate the intersection of
+    * the two "optimal" line segments, then move it into the unit square
+    * if it lies outside.
+    */
     private function adjust_vertices(path : Path) : Void
     {
         var pt : Vector<PointInt> = path.pt;
@@ -1248,8 +1248,8 @@ class POTrace {
     
    /**
     * Optimize the path p, replacing sequences of Bezier segments by a
-	* single segment when possible.
-	*/
+    * single segment when possible.
+    */
     private function opticurve(path : Path, optTolerance : Float) : Void
     {
         var m : Int = path.curves.n;
@@ -1367,10 +1367,10 @@ class POTrace {
     }
     
    /**
-	* Calculate best fit from i+.5 to j+.5.  Assume i<j (cyclically).
-	* Return 0 and set badness and parameters (alpha, beta), if
-	* possible. Return 1 if impossible.
-	*/
+    * Calculate best fit from i+.5 to j+.5.  Assume i<j (cyclically).
+    * Return 0 and set badness and parameters (alpha, beta), if
+    * possible. Return 1 if impossible.
+    */
     private function opti_penalty(path : Path, i : Int, j : Int, res : Opti, optTolerance : Float, convc : Vector<Int>, areac : Vector<Float>) : Bool
     {
         var m : Int = path.curves.n;
@@ -1608,25 +1608,25 @@ class POTrace {
     /////////////////////////////////////////////////////////////////////////
     
    /**
-	* Return a direction that is 90 degrees counterclockwise from p2-p0,
-	* but then restricted to one of the major wind directions (n, nw, w, etc)
-	*/
+    * Return a direction that is 90 degrees counterclockwise from p2-p0,
+    * but then restricted to one of the major wind directions (n, nw, w, etc)
+    */
     private function dorth_infty(p0 : Point, p2 : Point) : PointInt
     {
         return new PointInt(-sign(p2.y - p0.y), sign(p2.x - p0.x));
     }
     
    /**
-	* Return (p1-p0) x (p2-p0), the area of the parallelogram
-	*/
+    * Return (p1-p0) x (p2-p0), the area of the parallelogram
+    */
     private function dpara(p0 : Point, p1 : Point, p2 : Point) : Float{
         return (p1.x - p0.x) * (p2.y - p0.y) - (p2.x - p0.x) * (p1.y - p0.y);
     }
     
    /**
-	* ddenom/dpara have the property that the square of radius 1 centered
-	* at p1 intersects the line p0p2 iff |dpara(p0,p1,p2)| <= ddenom(p0,p2)
-	*/
+    * ddenom/dpara have the property that the square of radius 1 centered
+    * at p1 intersects the line p0p2 iff |dpara(p0,p1,p2)| <= ddenom(p0,p2)
+    */
     private function ddenom(p0 : Point, p2 : Point) : Float
     {
         var r : PointInt = dorth_infty(p0, p2);
@@ -1634,8 +1634,8 @@ class POTrace {
     }
     
    /**
-	* Return true if a <= b < c < a, in a cyclic sense (mod n)
-	*/
+    * Return true if a <= b < c < a, in a cyclic sense (mod n)
+    */
     private function cyclic(a : Int, b : Int, c : Int) : Bool
     {
         if (a <= c) {
@@ -1647,9 +1647,9 @@ class POTrace {
     }
     
    /**
-	* Determine the center and slope of the line i..j. Assume i < j.
-	* Needs "sum" components of p to be set.
-	*/
+    * Determine the center and slope of the line i..j. Assume i < j.
+    * Needs "sum" components of p to be set.
+    */
     private function pointslope(path : Path, i : Int, j : Int, ctr : Point, dir : Point) : Void
     {
         // assume i < j
@@ -1717,8 +1717,8 @@ class POTrace {
     }
     
    /**
-	* Apply quadratic form Q to vector w = (w.x, w.y)
-	*/
+    * Apply quadratic form Q to vector w = (w.x, w.y)
+    */
     private function quadform(Q : Vector<Vector<Float>>, w : Point) : Float
     {
         var sum : Float = 0;
@@ -1735,8 +1735,8 @@ class POTrace {
     }
     
    /**
-	* Calculate point of a bezier curve
-	*/
+    * Calculate point of a bezier curve
+    */
     private function bezier(t : Float, p0 : Point, p1 : Point, p2 : Point, p3 : Point) : Point
     {
         var s : Float = 1 - t;
@@ -1755,10 +1755,10 @@ class POTrace {
     }
     
    /**
-	* Calculate the point t in [0..1] on the (convex) bezier curve
-	* (p0,p1,p2,p3) which is tangent to q1-q0. Return -1.0 if there is no
-	* solution in [0..1].
-	*/
+    * Calculate the point t in [0..1] on the (convex) bezier curve
+    * (p0,p1,p2,p3) which is tangent to q1-q0. Return -1.0 if there is no
+    * solution in [0..1].
+    */
     private function tangent(p0 : Point, p1 : Point, p2 : Point, p3 : Point, q0 : Point, q1 : Point) : Float
     {
         // (1-t)^2 A + 2(1-t)t B + t^2 C = 0
@@ -1794,50 +1794,50 @@ class POTrace {
     }
     
    /**
-	* Calculate distance between two points
-	*/
+    * Calculate distance between two points
+    */
     private function ddist(p : Point, q : Point) : Float
     {
         return Math.sqrt((p.x - q.x) * (p.x - q.x) + (p.y - q.y) * (p.y - q.y));
     }
     
    /**
-	* Calculate p1 x p2
-	* (Integer version)
-	*/
+    * Calculate p1 x p2
+    * (Integer version)
+    */
     private function xprod(p1 : PointInt, p2 : PointInt) : Int
     {
         return p1.x * p2.y - p1.y * p2.x;
     }
     
    /**
-	* Calculate p1 x p2
-	* (Floating point version)
-	*/
+    * Calculate p1 x p2
+    * (Floating point version)
+    */
     private function xprodf(p1 : Point, p2 : Point) : Int
     {
         return p1.x * p2.y - p1.y * p2.x;
     }
     
    /**
-	* Calculate (p1 - p0) x (p3 - p2)
-	*/
+    * Calculate (p1 - p0) x (p3 - p2)
+    */
     private function cprod(p0 : Point, p1 : Point, p2 : Point, p3 : Point) : Float
     {
         return (p1.x - p0.x) * (p3.y - p2.y) - (p3.x - p2.x) * (p1.y - p0.y);
     }
     
    /**
-	* Calculate (p1 - p0) * (p2 - p0)
-	*/
+    * Calculate (p1 - p0) * (p2 - p0)
+    */
     private function iprod(p0 : Point, p1 : Point, p2 : Point) : Float
     {
         return (p1.x - p0.x) * (p2.x - p0.x) + (p1.y - p0.y) * (p2.y - p0.y);
     }
     
    /**
-	* Calculate (p1 - p0) * (p3 - p2)
-	*/
+    * Calculate (p1 - p0) * (p3 - p2)
+    */
     private function iprod1(p0 : Point, p1 : Point, p2 : Point, p3 : Point) : Float
     {
         return (p1.x - p0.x) * (p3.x - p2.x) + (p1.y - p0.y) * (p3.y - p2.y);
