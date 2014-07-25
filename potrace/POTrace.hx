@@ -46,8 +46,7 @@ import openfl.display.BitmapData;
 import openfl.geom.Point;
 import openfl.Vector;
 
-class POTrace
-{
+class POTrace {
     public var params(get, set) : POTraceParams;
     public var backend(get, set) : IBackend;
 
@@ -62,36 +61,36 @@ class POTrace
     
     private static var COS179 : Float = Math.cos(179 * Math.PI / 180);
     
-    public function new(params : POTraceParams = null, backend : IBackend = null)
-    {
+    public function new(params : POTraceParams = null, backend : IBackend = null) {
         _params = params || new POTraceParams();
         _backend = backend || new NullBackend();
     }
     
-    private function get_Params() : POTraceParams{
+    private function get_Params() : POTraceParams {
         return _params;
     }
-    private function set_Params(params : POTraceParams) : POTraceParams{
+
+    private function set_Params(params : POTraceParams) : POTraceParams {
         _params = params;
         return params;
     }
     
-    private function get_Backend() : IBackend{
+    private function get_Backend() : IBackend {
         return _backend;
     }
-    private function set_Backend(backend : IBackend) : IBackend{
+
+    private function set_Backend(backend : IBackend) : IBackend {
         _backend = backend;
         return backend;
     }
-    
-    /*
-		 * Main function
-		 * Yields the curve informations related to a given binary bitmap.
-		 * Returns an array of curvepaths. 
-		 * Each of this paths is a list of connecting curves.
-		 */
-    public function potrace_trace(bitmapData : BitmapData) : Array<Array<Array<Curve>>>
-    {
+
+   /**
+    * Main Function
+    * Yields the curve informations related to a given binary bitmap.
+    * Returns an array of curvepaths.
+    * Each of this paths is a list of connecting curves.
+    */
+    public function potrace_trace(bitmapData : BitmapData) : Array<Array<Array<Curve>>> {
         // Make sure there is a 1px white border
         var bitmapDataCopy : BitmapData = new BitmapData(bitmapData.width + 2, bitmapData.height + 2, false, 0xffffff);
         bitmapDataCopy.threshold(bitmapData, bitmapData.rect, new Point(1, 1), params.thresholdOperator, params.threshold, 0x000000, 0xffffff, false);
@@ -167,12 +166,13 @@ class POTrace
         return shapes;
     }
     
-    /*
-		 * Decompose the given bitmap into paths. Returns a list of
-		 * Path objects with the fields len, pt, area filled
-		 */
-    private function bm_to_pathlist(bitmapDataMatrix : Vector<Vector<Int>>) : Array<Array<Path>>
-    {
+   /**
+    * Decompose the given bitmap into paths. Returns a list of
+	* Path objects with the fields len, pt, area filled
+	*
+	* @param bitmapDataMatix
+	*/
+    private function bm_to_pathlist(bitmapDataMatrix : Vector<Vector<Int>>) : Array<Array<Path>> {
         var plists : Array<Array<Path>> = new Array<Array<Path>>();
         var pt : PointInt;
         while ((pt = find_next(bitmapDataMatrix)) != null){
@@ -181,12 +181,13 @@ class POTrace
         return plists;
     }
     
-    /*
-		 * Searches a point such that source[x, y] = true and source[x+1, y] = false.
-		 * If this not exists, null will be returned, else the result is Point(x, y).
-		 */
-    private function find_next(bitmapDataMatrix : Vector<Vector<Int>>) : PointInt
-    {
+   /**
+	* Searches a point such that source[x, y] = true and source[x+1, y] = false.
+	* If this not exists, null will be returned, else the result is Point(x, y).
+	*
+	* @param bitmpaDataMatrix
+	*/
+    private function find_next(bitmapDataMatrix : Vector<Vector<Int>>) : PointInt {
         var x : Int;
         var y : Int;
         for (y in 1...bmHeight - 1){
@@ -199,9 +200,15 @@ class POTrace
         }
         return null;
     }
-    
-    private function get_contour(bitmapDataMatrix : Vector<Vector<Int>>, pt : PointInt, plists : Array<Array<Path>>) : Void
-    {
+
+   /**
+    * Get shape contour
+    *
+    * @param bitmapDataMatrix
+    * @param pt
+    * @param plists
+    */
+    private function get_contour(bitmapDataMatrix : Vector<Vector<Int>>, pt : PointInt, plists : Array<Array<Path>>) : Void {
         var plist : Array<Path> = new Array<Path>();
         
         var path : Path = find_path(bitmapDataMatrix, pt);
@@ -231,19 +238,21 @@ class POTrace
             }
         }
     }
-    
-    /*
-		 * Compute a path in the binary matrix.
-		 * 
-		 * Start path at the point (x0,x1), which must be an upper left corner
-		 * of the path. Also compute the area enclosed by the path. Return a
-		 * new path_t object, or NULL on error (note that a legitimate path
-		 * cannot have length 0).
-		 * 
-		 * We omit turnpolicies and sign
-		 */
-    private function find_path(bitmapDataMatrix : Vector<Vector<Int>>, start : PointInt) : Path
-    {
+
+   /**
+    * Compute a path in the binary matrix.
+	*
+    * Start path at the point (x0,x1), which must be an upper left corner
+	* of the path. Also compute the area enclosed by the path. Return a
+	* new path_t object, or NULL on error (note that a legitimate path
+	* cannot have length 0).
+	*
+	* We omit turnpolicies and sign
+	*
+	* @param bitmapDataMatrix
+	* @param start
+	*/
+    private function find_path(bitmapDataMatrix : Vector<Vector<Int>>, start : PointInt) : Path {
         var l : Vector<PointInt> = new Vector<PointInt>();
         var p : PointInt = start.clone();
         var dir : Int = Direction.NORTH;
@@ -279,12 +288,14 @@ class POTrace
         return result;
     }
     
-    /*
-		 * Searches a point inside a path such that source[x, y] = true and source[x+1, y] = false.
-		 * If this not exists, null will be returned, else the result is Point(x, y).
-		 */
-    private function find_next_in_path(bitmapDataMatrix : Vector<Vector<Int>>, path : Path) : PointInt
-    {
+   /**
+	* Searches a point inside a path such that source[x, y] = true and source[x+1, y] = false.
+	* If this not exists, null will be returned, else the result is Point(x, y).
+	*
+	* @param bitmapDataMatrix
+	* @param path
+	*/
+    private function find_next_in_path(bitmapDataMatrix : Vector<Vector<Int>>, path : Path) : PointInt {
         if (path.monotonIntervals.length == 0) {
             return null;
         }
@@ -363,8 +374,7 @@ class POTrace
         return null;
     }
     
-    private function xor_path(bitmapDataMatrix : Vector<Vector<Int>>, path : Path) : Void
-    {
+    private function xor_path(bitmapDataMatrix : Vector<Vector<Int>>, path : Path) : Void {
         if (path.monotonIntervals.length == 0) {
             return;
         }
@@ -595,9 +605,9 @@ class POTrace
     // PREPARATION
     /////////////////////////////////////////////////////////////////////////
     
-    /*
-		 * Fill in the sum* fields of a path (used for later rapid summing)
-		 */
+   /**
+	* Fill in the sum* fields of a path (used for later rapid summing)
+	*/
     private function calc_sums(path : Path) : Void
     {
         var n : Int = path.pt.length;
@@ -630,16 +640,16 @@ class POTrace
     // determine the straight subpaths (Sec. 2.2.1).
     /////////////////////////////////////////////////////////////////////////
     
-    /*
-		 * Fill in the "lon" component of a path object (based on pt/len).
-		 * For each i, lon[i] is the furthest index such that a straight line 
-		 * can be drawn from i to lon[i].
-		 * 
-		 * This algorithm depends on the fact that the existence of straight
-		 * subpaths is a triplewise property. I.e., there exists a straight
-		 * line through squares i0,...,in if there exists a straight line
-		 * through i,j,k, for all i0 <= i < j < k <= in. (Proof?)
-		 */
+   /**
+    * Fill in the "lon" component of a path object (based on pt/len).
+    * For each i, lon[i] is the furthest index such that a straight line
+    * can be drawn from i to lon[i].
+    *
+    * This algorithm depends on the fact that the existence of straight
+    * subpaths is a triplewise property. I.e., there exists a straight
+    * line through squares i0,...,in if there exists a straight line
+    * through i,j,k, for all i0 <= i < j < k <= in. (Proof?)
+    */
     private function calc_lon(path : Path) : Void
     {
         var i : Int;
@@ -753,14 +763,11 @@ class POTrace
             if (foundk) {
                 {i--;continue;
                 }
-            }  // point along k1..k which satisfied the constraint.    // k is the first one violating it. We now need to find the last    // k1 was the last "corner" satisfying the current constraint, and  
-            
-            
-            
-            
-            
-            
-            
+            }
+
+            // k1 was the last "corner" satisfying the current constraint, and
+            // k is the first one violating it. We now need to find the last
+            // point along k1..k which satisfied the constraint.
             dk.x = sign(pt[k].x - pt[k1].x);
             dk.y = sign(pt[k].y - pt[k1].y);
             cur.x = pt[k1].x - pt[i].x;
@@ -785,15 +792,11 @@ class POTrace
             }
             pivot[i] = mod(k1 + j, n);
             i--;
-        }  // for all i' with i <= i' < k, i' < k <= pivk[i']. */    // for each i, let lon[i] be the largest k such that    // Clean up:  
-        
-        
-        
-        
-        
-        
-        
-        
+        }
+
+        // Clean up:
+        // for each i, let lon[i] be the largest k such that
+        // for all i' with i <= i' < k, i' < k <= pivk[i']. */
         j = pivot[n - 1];
         path.lon[n - 1] = j;
         
@@ -818,10 +821,10 @@ class POTrace
     // Calculate the optimal polygon (Sec. 2.2.2 - 2.2.4).
     /////////////////////////////////////////////////////////////////////////
     
-    /* 
-		 * Auxiliary function: calculate the penalty of an edge from i to j in
-		 * the given path. This needs the "lon" and "sum*" data.
-		 */
+   /**
+	* Auxiliary function: calculate the penalty of an edge from i to j in
+	* the given path. This needs the "lon" and "sum*" data.
+	*/
     private function penalty3(path : Path, i : Int, j : Int) : Float
     {
         var n : Int = path.pt.length;
@@ -855,9 +858,9 @@ class POTrace
         return Math.sqrt(ex * ex * a + 2 * ex * ey * b + ey * ey * c);
     }
     
-    /*
-		 * Find the optimal polygon.
-		 */
+   /**
+	* Find the optimal polygon.
+	*/
     private function bestpolygon(path : Path) : Void
     {
         var i : Int;
@@ -883,22 +886,19 @@ class POTrace
                 c = mod(i + 1, n);
             }
             clip0[i] = ((c < i)) ? n : c;
-        }  // j <= clip0[i] iff clip1[j] <= i, for i,j = 0..n    // calculate backwards path clipping, non-cyclic.  
-        
-        
-        
-        
-        
+        }
+
+        // calculate backwards path clipping, non-cyclic.
+        // j <= clip0[i] iff clip1[j] <= i, for i,j = 0..n
         j = 1;
         for (i in 0...n){
             while (j <= clip0[i]){
                 clip1[j] = i;
                 j++;
             }
-        }  // calculate seg0[j] = longest path from 0 with j segments  
-        
-        
-        
+        }
+
+        // calculate seg0[j] = longest path from 0 with j segments
         i = 0;
         for (j in 0...n){
             seg0[j] = i;
@@ -955,11 +955,11 @@ class POTrace
     // Vertex adjustment (Sec. 2.3.1).
     /////////////////////////////////////////////////////////////////////////
     
-    /*
-		 * Adjust vertices of optimal polygon: calculate the intersection of
-		 * the two "optimal" line segments, then move it into the unit square
-		 * if it lies outside.
-		 */
+   /**
+	* Adjust vertices of optimal polygon: calculate the intersection of
+	* the two "optimal" line segments, then move it into the unit square
+	* if it lies outside.
+	*/
     private function adjust_vertices(path : Path) : Void
     {
         var pt : Vector<PointInt> = path.pt;
@@ -1069,12 +1069,10 @@ class POTrace
                     w.x = (-Q[0][2] * Q[1][1] + Q[1][2] * Q[0][1]) / det;
                     w.y = (Q[0][2] * Q[1][0] - Q[1][2] * Q[0][0]) / det;
                     break;
-                }  // orthogonal axis, through the center of the unit square    // matrix is singular - lines are parallel. Add another,  
-                
-                
-                
-                
-                
+                }
+                // matrix is singular - lines are parallel. Add another,
+                // orthogonal axis, through the center of the unit square
+
                 if (Q[0][0] > Q[1][1]) {
                     v[0] = -Q[0][1];
                     v[1] = Q[0][0];
@@ -1104,12 +1102,10 @@ class POTrace
                 path.curves.vertex[i] = new Point(w.x + x0, w.y + y0);
                 {i++;continue;
                 }
-            }  // now minimize quadratic on boundary of square    // the minimum was not in the unit square;  
-            
-            
-            
-            
-            
+            }
+
+            // the minimum was not in the unit square;
+            // now minimize quadratic on boundary of square
             min = quadform(Q, s);
             xmin = s.x;
             ymin = s.y;
@@ -1142,10 +1138,9 @@ class POTrace
                         ymin = w.y;
                     }
                 }
-            }  // check four corners  
-            
-            
-            
+            }
+
+            // check four corners
             for (l in 0...2){
                 for (k in 0...2){
                     w.x = s.x - 0.5 + l;
@@ -1157,10 +1152,9 @@ class POTrace
                         ymin = w.y;
                     }
                 }
-            }  // - 1 because we have a additional border set to the bitmap  
-            
-            
-            
+            }
+
+            // - 1 because we have a additional border set to the bitmap
             path.curves.vertex[i] = new Point(xmin + x0 - 1, ymin + y0 - 1);
             {i++;continue;
             }
@@ -1198,10 +1192,9 @@ class POTrace
                 i++;
                 j--;
             }
-        }  /* examine each vertex and find its best fit */  
-        
-        
-        
+        }
+
+        /* examine each vertex and find its best fit */
         for (i in 0...m){
             j = mod(i + 1, m);
             k = mod(i + 2, m);
@@ -1216,10 +1209,9 @@ class POTrace
             }
             else {
                 alpha = 4 / 3;
-            }  // remember "original" value of alpha */  
-            
-            
-            
+            }
+
+            // remember "original" value of alpha */
             curve.alpha0[j] = alpha;
             
             if (alpha > alphaMax) {
@@ -1241,8 +1233,9 @@ class POTrace
                 curve.controlPoints[j][0] = p2;
                 curve.controlPoints[j][1] = p3;
                 curve.controlPoints[j][2] = p4;
-            }  // store the "cropped" value of alpha  
-            
+            }
+
+            // store the "cropped" value of alpha
             curve.alpha[j] = alpha;
             curve.beta[j] = 0.5;
         }
@@ -1253,10 +1246,10 @@ class POTrace
     // Curve optimization (Sec. 2.4).
     /////////////////////////////////////////////////////////////////////////
     
-    /*
-		 * Optimize the path p, replacing sequences of Bezier segments by a
-		 * single segment when possible.
-		 */
+   /**
+    * Optimize the path p, replacing sequences of Bezier segments by a
+	* single segment when possible.
+	*/
     private function opticurve(path : Path, optTolerance : Float) : Void
     {
         var m : Int = path.curves.n;
@@ -1284,10 +1277,9 @@ class POTrace
             else {
                 convc[i] = 0;
             }
-        }  // Pre-calculate areas  
-        
-        
-        
+        }
+
+        // Pre-calculate areas
         area = 0;
         areac[0] = 0;
         p0 = path.curves.vertex[0];
@@ -1365,21 +1357,20 @@ class POTrace
             }
             j = pt[j];
             i--;
-        }  /* Calculate beta parameters */  
-        
-        
-        
+        }
+
+        /* Calculate beta parameters */
         for (i in 0...om){
             i1 = mod(i + 1, om);
             path.optimizedCurves.beta[i] = s[i] / (s[i] + t[i1]);
         }
     }
     
-    /*
-		 * Calculate best fit from i+.5 to j+.5.  Assume i<j (cyclically).
-		 * Return 0 and set badness and parameters (alpha, beta), if
-		 * possible. Return 1 if impossible.
-		 */
+   /**
+	* Calculate best fit from i+.5 to j+.5.  Assume i<j (cyclically).
+	* Return 0 and set badness and parameters (alpha, beta), if
+	* possible. Return 1 if impossible.
+	*/
     private function opti_penalty(path : Path, i : Int, j : Int, res : Opti, optTolerance : Float, convc : Vector<Int>, areac : Vector<Float>) : Bool
     {
         var m : Int = path.curves.n;
@@ -1421,10 +1412,9 @@ class POTrace
                 return true;
             }
             k = k1;
-        }  // the curve we're working in:  
-        
-        
-        
+        }
+
+        // the curve we're working in:
         var p0 : Point = path.curves.controlPoints[mod(i, m)][2];
         var p1 : Point = path.curves.vertex[mod(i + 1, m)];
         var p2 : Point = path.curves.vertex[mod(j, m)];
@@ -1499,10 +1489,9 @@ class POTrace
             }
             res.pen += d1 * d1;
             k = k1;
-        }  // Check corners  
-        
-        
-        
+        }
+
+        // Check corners
         k = i;
         while (k != j){
             k1 = mod(k + 1, m);
@@ -1618,35 +1607,35 @@ class POTrace
     // AUXILIARY FUNCTIONS
     /////////////////////////////////////////////////////////////////////////
     
-    /*
-		 * Return a direction that is 90 degrees counterclockwise from p2-p0,
-		 * but then restricted to one of the major wind directions (n, nw, w, etc)
-		 */
+   /**
+	* Return a direction that is 90 degrees counterclockwise from p2-p0,
+	* but then restricted to one of the major wind directions (n, nw, w, etc)
+	*/
     private function dorth_infty(p0 : Point, p2 : Point) : PointInt
     {
         return new PointInt(-sign(p2.y - p0.y), sign(p2.x - p0.x));
     }
     
-    /*
-		 * Return (p1-p0) x (p2-p0), the area of the parallelogram
-		 */
+   /**
+	* Return (p1-p0) x (p2-p0), the area of the parallelogram
+	*/
     private function dpara(p0 : Point, p1 : Point, p2 : Point) : Float{
         return (p1.x - p0.x) * (p2.y - p0.y) - (p2.x - p0.x) * (p1.y - p0.y);
     }
     
-    /*
-		 * ddenom/dpara have the property that the square of radius 1 centered
-		 * at p1 intersects the line p0p2 iff |dpara(p0,p1,p2)| <= ddenom(p0,p2)
-		 */
+   /**
+	* ddenom/dpara have the property that the square of radius 1 centered
+	* at p1 intersects the line p0p2 iff |dpara(p0,p1,p2)| <= ddenom(p0,p2)
+	*/
     private function ddenom(p0 : Point, p2 : Point) : Float
     {
         var r : PointInt = dorth_infty(p0, p2);
         return r.y * (p2.x - p0.x) - r.x * (p2.y - p0.y);
     }
     
-    /*
-		 * Return true if a <= b < c < a, in a cyclic sense (mod n)
-		 */
+   /**
+	* Return true if a <= b < c < a, in a cyclic sense (mod n)
+	*/
     private function cyclic(a : Int, b : Int, c : Int) : Bool
     {
         if (a <= c) {
@@ -1657,10 +1646,10 @@ class POTrace
         }
     }
     
-    /*
-		 * Determine the center and slope of the line i..j. Assume i < j.
-		 * Needs "sum" components of p to be set.
-		 */
+   /**
+	* Determine the center and slope of the line i..j. Assume i < j.
+	* Needs "sum" components of p to be set.
+	*/
     private function pointslope(path : Path, i : Int, j : Int, ctr : Point, dir : Point) : Void
     {
         // assume i < j
@@ -1727,9 +1716,9 @@ class POTrace
         }
     }
     
-    /*
-		 * Apply quadratic form Q to vector w = (w.x, w.y)
-		 */
+   /**
+	* Apply quadratic form Q to vector w = (w.x, w.y)
+	*/
     private function quadform(Q : Vector<Vector<Float>>, w : Point) : Float
     {
         var sum : Float = 0;
@@ -1745,9 +1734,9 @@ class POTrace
         return sum;
     }
     
-    /*
-		 * Calculate point of a bezier curve
-		 */
+   /**
+	* Calculate point of a bezier curve
+	*/
     private function bezier(t : Float, p0 : Point, p1 : Point, p2 : Point, p3 : Point) : Point
     {
         var s : Float = 1 - t;
@@ -1765,11 +1754,11 @@ class POTrace
         return res;
     }
     
-    /*
-		 * Calculate the point t in [0..1] on the (convex) bezier curve
-		 * (p0,p1,p2,p3) which is tangent to q1-q0. Return -1.0 if there is no
-		 * solution in [0..1].
-		 */
+   /**
+	* Calculate the point t in [0..1] on the (convex) bezier curve
+	* (p0,p1,p2,p3) which is tangent to q1-q0. Return -1.0 if there is no
+	* solution in [0..1].
+	*/
     private function tangent(p0 : Point, p1 : Point, p2 : Point, p3 : Point, q0 : Point, q1 : Point) : Float
     {
         // (1-t)^2 A + 2(1-t)t B + t^2 C = 0
@@ -1804,51 +1793,51 @@ class POTrace
         }
     }
     
-    /*
-		 * Calculate distance between two points
-		 */
+   /**
+	* Calculate distance between two points
+	*/
     private function ddist(p : Point, q : Point) : Float
     {
         return Math.sqrt((p.x - q.x) * (p.x - q.x) + (p.y - q.y) * (p.y - q.y));
     }
     
-    /*
-		 * Calculate p1 x p2
-		 * (Integer version)
-		 */
+   /**
+	* Calculate p1 x p2
+	* (Integer version)
+	*/
     private function xprod(p1 : PointInt, p2 : PointInt) : Int
     {
         return p1.x * p2.y - p1.y * p2.x;
     }
     
-    /*
-		 * Calculate p1 x p2
-		 * (Floating point version)
-		 */
+   /**
+	* Calculate p1 x p2
+	* (Floating point version)
+	*/
     private function xprodf(p1 : Point, p2 : Point) : Int
     {
         return p1.x * p2.y - p1.y * p2.x;
     }
     
-    /*
-		 * Calculate (p1 - p0) x (p3 - p2)
-		 */
+   /**
+	* Calculate (p1 - p0) x (p3 - p2)
+	*/
     private function cprod(p0 : Point, p1 : Point, p2 : Point, p3 : Point) : Float
     {
         return (p1.x - p0.x) * (p3.y - p2.y) - (p3.x - p2.x) * (p1.y - p0.y);
     }
     
-    /*
-		 * Calculate (p1 - p0) * (p2 - p0)
-		 */
+   /**
+	* Calculate (p1 - p0) * (p2 - p0)
+	*/
     private function iprod(p0 : Point, p1 : Point, p2 : Point) : Float
     {
         return (p1.x - p0.x) * (p2.x - p0.x) + (p1.y - p0.y) * (p2.y - p0.y);
     }
     
-    /*
-		 * Calculate (p1 - p0) * (p3 - p2)
-		 */
+   /**
+	* Calculate (p1 - p0) * (p3 - p2)
+	*/
     private function iprod1(p0 : Point, p1 : Point, p2 : Point, p3 : Point) : Float
     {
         return (p1.x - p0.x) * (p3.x - p2.x) + (p1.y - p0.y) * (p3.y - p2.y);
@@ -1884,4 +1873,3 @@ class POTrace
         return ((x > 0)) ? 1 : (((x < 0)) ? -1 : 0);
     }
 }
-
